@@ -1,15 +1,13 @@
 const express = require('express');
 const fs = require('fs');
+const cors = require('cors');
+
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
 
 app.get('/api', (req, res) => {
   fs.readFile(path.join(__dirname, 'public', 'data.json'), 'utf8', (err, data) => {
@@ -19,7 +17,7 @@ app.get('/api', (req, res) => {
       } else {
           try {
               const jsonData = JSON.parse(data);
-              
+              console.log("Sending data:", jsonData);
               res.json(jsonData);
           } catch (parseError) {
               console.error("Error parsing the json data:", parseError);
